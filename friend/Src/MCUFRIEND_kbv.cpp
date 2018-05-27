@@ -45,7 +45,7 @@
 #define USING_16BIT_BUS 0
 #endif
 
-MCUFRIEND_kbv::MCUFRIEND_kbv(int CS, int RS, int WR, int RD, int RST): Adafruit_GFX(240, 320)
+MCUFRIEND_kbv::MCUFRIEND_kbv(): Adafruit_GFX(240, 320)
 {
     // we can not access GPIO pins until AHB has been enabled.
 }
@@ -129,7 +129,7 @@ static uint16_t read16bits(void)
 uint16_t MCUFRIEND_kbv::readReg(uint16_t reg, int8_t index)
 {
     uint16_t ret;
-    uint8_t lo;
+   // uint8_t lo;
     if (!done_reset)
         reset();
     CS_ACTIVE;
@@ -162,7 +162,7 @@ uint32_t MCUFRIEND_kbv::readReg40(uint16_t reg)
 
 uint16_t MCUFRIEND_kbv::readID(void)
 {
-    uint16_t ret, ret2;
+    uint16_t ret;//, ret2;
     uint8_t msb;
     ret = readReg(0);           //forces a reset() if called before begin()
     if (ret == 0x5408)          //the SPFD5408 fails the 0xD3D3 test.
@@ -222,8 +222,8 @@ uint16_t MCUFRIEND_kbv::readID(void)
     }
 //    if (msb == 0xFF && ret == 0xFFFF) //R61526 [xx FF FF FF]
 //        return 0x1526;          //subsequent begin() enables Command Access
-    if (ret == 0x1526)          //R61526 [xx 06 15 26] if I have written NVM
-        return 0x1526;          //subsequent begin() enables Command Access
+//    if (ret == 0x1526)          //R61526 [xx 06 15 26] if I have written NVM
+//        return 0x1526;          //subsequent begin() enables Command Access
 	if (ret == 0x8552)          //ST7789V: [xx 85 85 52]
         return 0x7789;
     if (ret == 0xAC11)          //?unknown [xx 61 AC 11]
@@ -252,8 +252,8 @@ int16_t MCUFRIEND_kbv::readGRAM(int16_t x, int16_t y, uint16_t * block, int16_t 
 {
     uint16_t ret, dummy, _MR = _MW;
     int16_t n = w * h, row = 0, col = 0;
-    uint8_t r, g, b, tmp;
-    if (!is8347 && _lcd_capable & MIPI_DCS_REV1) // HX8347 uses same register
+    uint8_t r, g, b;//, tmp;
+    if (!is8347 && (_lcd_capable & MIPI_DCS_REV1)) // HX8347 uses same register
         _MR = 0x2E;
     setAddrWindow(x, y, x + w - 1, y + h - 1);
     while (n > 0) {
@@ -316,7 +316,7 @@ void MCUFRIEND_kbv::setRotation(uint8_t r)
 #if defined(STM32L476xx)
 #undef SS
 #endif
-    uint16_t GS, SS, ORG, REV = _lcd_rev;
+    uint16_t GS, SS, ORG/*, REV*/ = _lcd_rev;
     uint8_t val, d[3];
     rotation = r & 3;           // just perform the operation ourselves on the protected variables
     _width = (rotation & 1) ? HEIGHT : WIDTH;

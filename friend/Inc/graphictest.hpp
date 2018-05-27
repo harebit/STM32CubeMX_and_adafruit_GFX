@@ -57,7 +57,4 @@ void progmemPrintln(const char *str);
 void runtests(void);
 
 
-
-extern const uint8_t hanzi[];
-
 #endif //GRAPHICTEST.HPP

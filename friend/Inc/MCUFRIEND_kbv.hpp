@@ -12,7 +12,8 @@ extern void HAL_Delay(uint32_t ms);
 class MCUFRIEND_kbv : public Adafruit_GFX {
 
 	public:
-	MCUFRIEND_kbv(int CS=0, int RS=0, int WR=0, int RD=0, int RST=0);
+	MCUFRIEND_kbv();
+//	MCUFRIEND_kbv(int CS=0, int RS=0, int WR=0, int RD=0, int RST=0);
 //	MCUFRIEND_kbv(int CS=A3, int RS=A2, int WR=A1, int RD=A0, int RST=A4);
 
 	void     reset(void);                                       // you only need the constructor
@@ -41,10 +42,10 @@ class MCUFRIEND_kbv : public Adafruit_GFX {
     protected:
 	uint32_t readReg32(uint16_t reg);
 	uint32_t readReg40(uint16_t reg);
-    uint16_t  _lcd_xor, _lcd_capable;
+    uint16_t  _lcd_xor=0, _lcd_capable=0;
 
 	private:
-	uint16_t _lcd_ID, _lcd_rev, _lcd_madctl, _lcd_drivOut, _MC, _MP, _MW, _SC, _EC, _SP, _EP;
+	uint16_t _lcd_ID=0, _lcd_rev=0, _lcd_madctl=0, _lcd_drivOut=0, _MC=0, _MP=0, _MW=0, _SC=0, _EC=0, _SP=0, _EP=0;
 };
 #endif //__cplusplus
 #endif // MCUFRIEND_kbv

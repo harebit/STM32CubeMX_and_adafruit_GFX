@@ -6,33 +6,6 @@ MCUFRIEND_kbv tft;
 //#include <Adafruit_TFTLCD.h>
 //Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
-void showhanzi(unsigned int x, unsigned int y, unsigned char index)
-{
-    uint8_t i, j, c, first = 1;
-    uint8_t *temp = (uint8_t*)hanzi;
-    uint16_t color;
-    tft.setAddrWindow(x, y, x + 31, y + 31);
-    temp += index * 128;
-    for (j = 0; j < 128; j++)
-    {
-        c = pgm_read_byte(temp);
-        for (i = 0; i < 8; i++)
-        {
-            if ((c & (1 << i)) != 0)
-            {
-                color = RED;
-            }
-            else
-            {
-                color = BLACK;
-            }
-            tft.pushColors(&color, 1, first);
-            first = 0;
-        }
-        temp++;
-    }
-}
-
 void setup(void) {
     /*Serial.begin(9600);
     uint32_t when = millis();
@@ -205,7 +178,7 @@ TEST result[12];
 
 void runtests(void)
 {
-    uint8_t i, len = 24, cnt;
+    uint8_t i, len = 24;
     uint32_t total;
     RUNTEST(0, "FillScreen               ", testFillScreen());
     RUNTEST(1, "Text                     ", testText());
