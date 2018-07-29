@@ -4,7 +4,7 @@
 #include <Print.hpp>
 #include "gfxfont.h"
 
-#ifdef __cplusplus
+#ifdef __cplusplus // the compiler has problems to recognize c++ and c
 
 class Adafruit_GFX : public Print {
 
