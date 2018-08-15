@@ -383,8 +383,20 @@ void write_8(uint8_t x)
 #define RESET_PIN  1
 
 // configure macros for the data pins
-#define write_8(d) { \
-        GPIOA->REGS(BSRR) = 0x0700 << 16; \
+#define write_8(d) {\
+		GPIOA->BSRR = 0x0700 << 16; \
+		GPIOB->BSRR = 0x0438 << 16; \
+		GPIOC->BSRR = 0x0080 << 16; \
+		GPIOA->BSRR = (  ((d) & (1<<0)) << 9) \
+					  | (((d) & (1<<2)) << 8) \
+					  | (((d) & (1<<7)) << 1);\
+		GPIOB->BSRR = (  ((d) & (1<<3)) << 0) \
+					  | (((d) & (1<<4)) << 1) \
+					  | (((d) & (1<<5)) >> 1) \
+					  | (((d) & (1<<6)) << 4);\
+		GPIOC->BSRR = (  ((d) & (1<<1)) << 6);}
+
+/*        GPIOA->REGS(BSRR) = 0x0700 << 16; \
         GPIOB->REGS(BSRR) = 0x0438 << 16; \
         GPIOC->REGS(BSRR) = 0x0080 << 16; \
         GPIOA->REGS(BSRR) = (  ((d) & (1<<0)) << 9) \
@@ -394,8 +406,20 @@ void write_8(uint8_t x)
                             | (((d) & (1<<4)) << 1) \
                             | (((d) & (1<<5)) >> 1) \
                             | (((d) & (1<<6)) << 4); \
-        GPIOC->REGS(BSRR) = (  ((d) & (1<<1)) << 6); \
-    }
+        GPIOC->REGS(BSRR) = (  ((d) & (1<<1)) << 6);}
+*/
+/*		GPIOA->BSRR = 0x0700 << 16; \
+		GPIOB->BSRR = 0x0438 << 16; \
+		GPIOC->BSRR = 0x0080 << 16; \
+		GPIOA->BSRR = (  ((d) & (1<<0)) << 9) \
+					  | (((d) & (1<<2)) << 8) \
+					  | (((d) & (1<<7)) << 1); \
+		GPIOB->BSRR = (  ((d) & (1<<3)) << 0) \
+					  | (((d) & (1<<4)) << 1) \
+					  | (((d) & (1<<5)) >> 1) \
+					  | (((d) & (1<<6)) << 4); \
+		GPIOC->BSRR = (  ((d) & (1<<1)) << 6);}
+*/
 
 #define read_8() (       (  (  (GPIOA->REGS(IDR) & (1<<9)) >> 9) \
                             | ((GPIOC->REGS(IDR) & (1<<7)) >> 6) \
@@ -414,7 +438,11 @@ void write_8(uint8_t x)
 #define setReadDir()  { GPIOA->MODER &= ~0x3F0000; GPIOB->MODER &= ~0x300FC0; GPIOC->MODER &= ~0xC000; }
 #else
 //                                 PA10,PA9,PA8                       PB10                   PB5,PB4,PB3                             PC7
-#define setWriteDir() {GP_OUT(GPIOA, CRH, 0xFFF); GP_OUT(GPIOB, CRH, 0xF00); GP_OUT(GPIOB, CRL, 0xFFF000); GP_OUT(GPIOC, CRL, 0xF0000000); }
+//#define setWriteDir() {GP_OUT(GPIOA, CRH, 0xFFF); GP_OUT(GPIOB, CRH, 0xF00); GP_OUT(GPIOB, CRL, 0xFFF000); GP_OUT(GPIOC, CRL, 0xF0000000); }
+#define setWriteDir() {GPIOA->CRH = (GPIOA->CRH & 0xFFFFF000) | 0x00000333;\
+					   GPIOB->CRH = (GPIOB->CRH & 0xFFFFF0FF) | 0x00000300;\
+					   GPIOB->CRL = (GPIOB->CRL & 0xFF000FFF) | 0x00333000;\
+					   GPIOC->CRL = (GPIOC->CRL & 0x0FFFFFFF) | 0x30000000;}
 #define setReadDir()  {GP_INP(GPIOA, CRH, 0xFFF); GP_INP(GPIOB, CRH, 0xF00); GP_INP(GPIOB, CRL, 0xFFF000); GP_INP(GPIOC, CRL, 0xF0000000); }
 #endif
 

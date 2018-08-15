@@ -22,7 +22,7 @@
 #ifndef WString_hpp
 #define WString_hpp
 
-#include <c++/6.3.1/stdlib.h>
+#include <c++/7.2.1/stdlib.h>
 #include <string.h>
 #include <pgmspace.h>
 #include "itoa.h"

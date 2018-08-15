@@ -22,7 +22,7 @@
 
 #ifdef __cplusplus
 
-#include <c++/6.3.1/math.h>
+#include <c++/7.2.1/math.h>
 #include <WString.hpp>
 #include <Printable.hpp>
 
